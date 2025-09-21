@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Test Legal Document Image</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        .document {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border: 2px solid #000;
+            line-height: 1.6;
+        }
+        .header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-decoration: underline;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .amount {
+            background: yellow;
+            padding: 2px 4px;
+            font-weight: bold;
+        }
+        .warning {
+            background: #ffcccc;
+            padding: 10px;
+            border: 1px solid red;
+            margin: 10px 0;
+        }
+        button {
+            background: #007cba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #005a87;
+        }
+    </style>
+</head>
+<body>
+    <div class="document" id="document">
+        <div class="header">LEGAL SERVICES AGREEMENT</div>
+        
+        <div class="section">
+            <div class="section-title">1. PAYMENT TERMS</div>
+            <p>Client agrees to pay <span class="amount">$15,000</span> within <span class="amount">30 days</span> of invoice date. Late payments will incur <span class="amount">24% annual interest rate</span>.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">2. LIABILITY CLAUSE</div>
+            <div class="warning">
+                <strong>WARNING:</strong> Provider's liability shall be <strong>UNLIMITED</strong> for all damages including consequential damages.
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">3. TERMINATION</div>
+            <p>Either party may terminate this agreement with <strong>IMMEDIATE EFFECT</strong> without notice. No cure period provided.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">4. CONFIDENTIALITY</div>
+            <p>All information shared shall remain confidential in <strong>PERPETUITY</strong>. Breach results in <span class="amount">$50,000</span> penalty.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">5. INDEMNIFICATION</div>
+            <p>Client shall indemnify Provider from ALL claims and legal fees without limitation.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">6. GOVERNING LAW</div>
+            <p>This agreement shall be governed by California law. Disputes resolved through binding arbitration.</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="downloadAsImage()">Download as PNG Image</button>
+        <button onclick="window.print()">Print to PDF</button>
+        <p style="color: #666; font-size: 14px;">
+            Use this image to test OCR functionality in LegalEase.<br>
+            The image contains legal terms that will trigger risk analysis.
+        </p>
+    </div>
+
+    <script>
+        function downloadAsImage() {
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const doc = document.getElementById('document');
+            
+            // Set canvas size
+            canvas.width = 800;
+            canvas.height = 1000;
+            
+            // Fill white background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text properties
+            ctx.fillStyle = 'black';
+            ctx.font = '16px Times New Roman';
+            
+            // Draw text content (simplified version)
+            const lines = [
+                'LEGAL SERVICES AGREEMENT',
+                '',
+                '1. PAYMENT TERMS',
+                'Client agrees to pay $15,000 within 30 days of invoice',
+                'date. Late payments will incur 24% annual interest rate.',
+                '',
+                '2. LIABILITY CLAUSE',
+                'WARNING: Provider\'s liability shall be UNLIMITED for',
+                'all damages including consequential damages.',
+                '',
+                '3. TERMINATION',
+                'Either party may terminate this agreement with',
+                'IMMEDIATE EFFECT without notice. No cure period provided.',
+                '',
+                '4. CONFIDENTIALITY',
+                'All information shared shall remain confidential in',
+                'PERPETUITY. Breach results in $50,000 penalty.',
+                '',
+                '5. INDEMNIFICATION',
+                'Client shall indemnify Provider from ALL claims and',
+                'legal fees without limitation.',
+                '',
+                '6. GOVERNING LAW',
+                'This agreement shall be governed by California law.',
+                'Disputes resolved through binding arbitration.'
+            ];
+            
+            let y = 50;
+            lines.forEach((line, index) => {
+                if (index === 0) {
+                    ctx.font = 'bold 20px Times New Roman';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(line, canvas.width / 2, y);
+                    ctx.textAlign = 'left';
+                    ctx.font = '16px Times New Roman';
+                } else if (line.match(/^\d+\./)) {
+                    ctx.font = 'bold 16px Times New Roman';
+                    ctx.fillText(line, 50, y);
+                    ctx.font = '16px Times New Roman';
+                } else {
+                    ctx.fillText(line, 50, y);
+                }
+                y += 25;
+            });
+            
+            // Download the image
+            const link = document.createElement('a');
+            link.download = 'legal-document-test.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>
